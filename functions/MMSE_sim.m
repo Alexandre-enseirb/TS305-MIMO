@@ -42,7 +42,7 @@ for i_sigma2 = 1:length(model.SNRdB)
 
         % récepteur
         Y_MMSE = VBLAST_decode_MMSE(Y, H, model.sigma2(i_sigma2), A);
-        Y_bit = de2bi(Y_MMSE.', model.M);
+        Y_bit = de2bi(Y_MMSE.', model.N);
 
         % évaluation des erreurs
         nErr = sum(Y_bit ~= X_bit, "all");
@@ -54,9 +54,7 @@ for i_sigma2 = 1:length(model.SNRdB)
     end
     ber(i_sigma2) = count.err_bit / count.bit;
     fer(i_sigma2) = count.err_fra / count.fra;
-    %disp(teb(i_sigma2));
 end
 
 
 end
-
