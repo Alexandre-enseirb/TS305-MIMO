@@ -19,7 +19,6 @@ fer = zeros(size(model.SNRdB));
 
 % -- mod/demod qpsk
 qpskmod = comm.QPSKModulator;
-qpskdemod = comm.QPSKDemodulator;
 
 % -- generation de l'alphabet
 A_dec = 0:2^model.Nb-1;
@@ -42,7 +41,7 @@ for i_sigma2 = 1:length(model.SNRdB)
 
         % récepteur
         Y_MMSE = VBLAST_decode_MMSE(Y, H, model.sigma2(i_sigma2), A);
-        Y_bit = de2bi(Y_MMSE.', model.N);
+        Y_bit = de2bi(Y_MMSE.', model.Nb);
 
         % évaluation des erreurs
         nErr = sum(Y_bit ~= X_bit, "all");

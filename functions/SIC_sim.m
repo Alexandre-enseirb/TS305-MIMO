@@ -42,7 +42,7 @@ for i_sigma2 = 1:length(model.SNRdB)
 
         % récepteur
         Y_SIC = VBLAST_decode_SIC(Y, H, A);
-        Y_bit = de2bi(Y_SIC(:), model.M);
+        Y_bit = de2bi(Y_SIC(:), model.Nb);
 
         % évaluation des erreurs
         nErr = sum(Y_bit ~= X_bit, "all");

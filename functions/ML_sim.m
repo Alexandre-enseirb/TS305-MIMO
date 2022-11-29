@@ -55,7 +55,7 @@ for i_sigma2 = 1:length(model.SNRdB)
             C_ML = VBLAST_decode_ML(Y, H, C);
         end
         Y_symb = qpskdemod(C_ML(:));
-        Y_bit = de2bi(Y_symb(:), model.M);
+        Y_bit = de2bi(Y_symb(:), model.Nb);
 
         % évaluation des erreurs
         nErr = sum(Y_bit ~= X_bit, "all");
