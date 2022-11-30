@@ -22,13 +22,16 @@ model.SNR    = 10.^(model.SNRdB/10);
 model.sigma2 = 1./model.SNR;
 
 % -- Parametres de simulation
-model.min_bits = 1e12;
-model.min_err  = 1000;
+model.min_bits = 100e6;
+model.min_err  = 100;
 
 % -- type du modele
 if ~any(strcmp(type, ["alamouti" "vblast"]))
     error("Modèle inconnu. Veuillez spécifier 'alamouti' ou 'vblast'.")
 end
+
+% -- nombre de simulations (pour moyennage)
+model.nSim = 100;
 
 model.type = type;
 end

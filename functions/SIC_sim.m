@@ -13,6 +13,17 @@ function [ber, fer] = SIC_sim(model)
 %   [ber, fer] = SIC_sim(model) permet de recuperer les taux d'erreurs
 %   binaire et paquet a l'issue de la simulation
 
+fprintf("## -- Successive Interference Cancellations\n\n");
+
+if model.nSim < 1
+    error("Erreur ! Veuillez spécifier un nombre strictement supérieur à 1 de simulations !");
+end
+
+if floor(model.nSim)~=model.nSim
+    error("Erreur ! Nombre de simulations non entier !")
+end
+
+
 % -- allocation memoire
 ber = zeros(size(model.SNRdB));
 fer = zeros(size(model.SNRdB));
@@ -26,36 +37,45 @@ A_dec = 0:2^model.Nb-1;
 A     = qpskmod(A_dec.');
 
 % -- simulation
-for i_sigma2 = 1:length(model.SNRdB)
-    count.err_bit = 0; % nb d'erreurs binaires
-    count.err_fra = 0; % nb d'erreurs paquet
-    count.bit     = 0; % nb de bits envoyes
-    count.fra     = 0; % nb de paquets envoyes
-    while (count.err_bit < model.min_err) && (count.bit < model.min_bits)
-        % emetteurs
-        [X_vblast, X_bit] = vblast_encode(model.N, model.L, model.Nb, qpskmod);
+tic;
+for i_sim = 1:model.nSim
+    for i_sigma2 = 1:length(model.SNRdB)
+        count.err_bit = 0; % nb d'erreurs binaires
+        count.err_fra = 0; % nb d'erreurs paquet
+        count.bit     = 0; % nb de bits envoyes
+        count.fra     = 0; % nb de paquets envoyes
+        while (count.err_bit < model.min_err) && (count.bit < model.min_bits)
+            % emetteurs
+            [X_vblast, X_bit] = vblast_encode(model.N, model.L, model.Nb, qpskmod);
 
-        % canal
-        H = randn(model.M, model.N, "like", 1i);
-        V = sqrt(model.sigma2(i_sigma2)) * randn(model.M, model.L, "like", 1i);
-        Y = H * X_vblast + V;
+            % canal
+            H = randn(model.M, model.N, "like", 1i);
+            V = sqrt(model.sigma2(i_sigma2)) * randn(model.M, model.L, "like", 1i);
+            Y = H * X_vblast + V;
 
-        % récepteur
-        Y_SIC = VBLAST_decode_SIC(Y, H, A);
-        Y_bit = de2bi(Y_SIC(:), model.Nb);
+            % récepteur
+            Y_SIC = VBLAST_decode_SIC(Y, H, A);
+            Y_bit = de2bi(Y_SIC(:), model.Nb);
 
-        % évaluation des erreurs
-        nErr = sum(Y_bit ~= X_bit, "all");
+            % évaluation des erreurs
+            nErr = sum(Y_bit ~= X_bit, "all");
 
-        count.err_bit = count.err_bit + nErr;
-        count.err_fra = count.err_fra + (nErr>0);
-        count.bit     = count.bit + numel(X_bit);
-        count.fra     = count.fra + 1;
+            count.err_bit = count.err_bit + nErr;
+            count.err_fra = count.err_fra + (nErr>0);
+            count.bit     = count.bit + numel(X_bit);
+            count.fra     = count.fra + 1;
+        end
+        ber(i_sigma2) = ber(i_sigma2) + count.err_bit / count.bit;
+        fer(i_sigma2) = fer(i_sigma2) + count.err_fra / count.fra;
+        %disp(teb(i_sigma2));
     end
-    ber(i_sigma2) = count.err_bit / count.bit;
-    fer(i_sigma2) = count.err_fra / count.fra;
-    %disp(teb(i_sigma2));
 end
+t = toc;
+% moyennage
+
+fprintf("Temps d'exécution: %.2f s\nTemps moyen: %.4f s\n\n",t,t/model.nSim);
+ber = ber/model.nSim;
+fer = fer/model.nSim;
 
 
 end
