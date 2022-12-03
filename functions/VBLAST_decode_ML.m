@@ -1,5 +1,5 @@
 function C_hat = VBLAST_decode_ML(Y, H, C)
-    C_hat = zeros(size(Y));
+    C_hat = zeros(size(C, 1), size(Y, 2));
     for i_y = 1:size(Y, 2)
         cout = zeros(1, size(C, 2));
         for i_c = 1:size(C, 2)
