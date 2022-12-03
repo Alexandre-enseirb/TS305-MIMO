@@ -65,11 +65,13 @@ for i_sim = 1:model.nSim
             % récepteur
             if strcmp(model.type, 'alamouti')
                 C_ML = Alamouti_decode_ML(Y, H, A);
+                Y_symb = qpskdemod(C_ML(:));
+                Y_bit = [mod(Y_symb, 2), Y_symb > 1];  % plus rapide que de2bi dans le cas (2,2)
             else
                 C_ML = VBLAST_decode_ML(Y, H, C);
+                Y_symb = qpskdemod(C_ML(:));
+                Y_bit = de2bi(Y_symb(:), model.Nb);
             end
-            Y_symb = qpskdemod(C_ML(:));
-            Y_bit = de2bi(Y_symb(:), model.Nb);
 
             % évaluation des erreurs
             nErr = sum(Y_bit ~= X_bit, "all");
@@ -81,7 +83,7 @@ for i_sim = 1:model.nSim
         end
         ber(i_sigma2) = ber(i_sigma2) + count.err_bit / count.bit;
         fer(i_sigma2) = fer(i_sigma2) + count.err_fra / count.fra;
-        %disp(teb(i_sigma2));
+        % disp(ber(i_sigma2));
     end
 end
 t = toc;
