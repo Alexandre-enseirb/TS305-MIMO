@@ -1,4 +1,4 @@
-function Y_SIC = VBLAST_decode_SIC(Y, H, A)
+function Y_SIC = VBLAST_decode_SIC(Y, H, A, ~)
 %VBLAST_DECODE_SIC decode les observations Y par la methode des annulations
 %successives des interferences (SIC) par rapport a la matrice du canal H et
 %a l'alphabet A.
@@ -43,8 +43,8 @@ for n=N-1:-1:1
 end
 %}
 
-% compensation de l'indice matlab
-Y_SIC = Y_SIC - ones(size(Y_SIC));
+% récupération des symboles
+Y_SIC = A(Y_SIC);
 
 
 end

@@ -1,26 +1,21 @@
-function Y_MMSE = VBLAST_decode_MMSE(Y, H, sigma2, A)
-%VBLAST_DECODE_MMSE decode les observations Y par minimisation de l'erreur
-%quadratique moyenne (MMSE) par rapport a la matrice du canal H et a 
+function Y_MMSE = VBLAST_decode_MMSE(Y, H, A, sigma2)
+%VBLAST_DECODE_MMSE décode les observations Y par minimisation de l'erreur
+%quadratique moyenne (MMSE) par rapport à la matrice du canal H et à 
 %l'alphabet A.
 
-% -- Parametres
-[M, N] = size(H);
-[~, L] = size(Y);     % taille du message
-Cov_sig = eye(N); % covariance des symboles emis (supposee Identite)
+% -- Paramètres
+[N, L] = size(Y);     % taille du message reçus
 
-F_MMSE = Cov_sig'*H' / (H*Cov_sig*H' + sigma2*eye(M)); % filtre MMSE
-
-% -- mise en forme de l'alphabet
-A = A.';
-A = repmat(A,N*L,1);
-
-% -- decodage
+% -- Filtrage
+Q = eye(N); % covariance des symboles émis (supposée identite)
+F_MMSE = Q'*H' / (H*Q*H' + sigma2*eye(N)); % filtre MMSE
 Z = F_MMSE*Y;
 
-Z_diff = (repmat(Z(:),1,4) - A).^2;
-[~, Y_MMSE] = min(Z_diff,[],2);
+% -- décodage
+A_map  = repmat(A.', N*L, 1);  % mise en forme de l'alphabet
+erreur = abs(Z(:) - A_map).^2;
+[~, ind_min] = min(erreur, [], 2);
 
-% compensation de l'indice matlab
-Y_MMSE = Y_MMSE - ones(size(Y_MMSE));
-
+% Récupération des symboles
+Y_MMSE = A(ind_min);
 end

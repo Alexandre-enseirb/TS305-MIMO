@@ -1,4 +1,4 @@
-function [X, X_bit] = alamouti_encode(mod)
+function [X, X_bit] = alamouti_encode(~, mod)
 %ALAMOUTI_ENCODE Summary of this function goes here
 %   Detailed explanation goes here
 

@@ -1,4 +1,4 @@
-function X_hat = VBLAST_decode_ML(Y, H, C)
+function X_hat = VBLAST_decode_ML(Y, H, C, ~)
     N = size(C, 1);  % nb d'antennes à l'émission
     L = size(H, 2);  % nb de symboles pour lesquels H est cste
     X_hat = zeros(N, L);  % estimation des symboles émis

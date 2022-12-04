@@ -2,9 +2,10 @@ function model = init_model(type)
 %INIT_MODEL permet de charger toutes les donnees necessaires aux
 %simulations.
 %
-%   init_model(SF, size_BER) cree un modele avec toutes les constantes
+%   init_model(type, decodage) cree un modele avec toutes les constantes
 %   necessaires a la simulation depuis le fichier constantes.m
 %   et les stock comme attributs d'un objet model.
+%   decodage est inutile pour type=="alamouti"
 
 % -- Parametres MIMO
 model.N  = 2; % antennes a l'emission
@@ -25,13 +26,7 @@ model.sigma2 = 1./model.SNR;
 model.min_bits = 100e6;
 model.min_err  = 100;
 
-% -- type du modele
-if ~any(strcmp(type, ["alamouti" "vblast"]))
-    error("Modèle inconnu. Veuillez spécifier 'alamouti' ou 'vblast'.")
-end
-
 % -- nombre de simulations (pour moyennage)
-model.nSim = 100;
+model.nSim = 1;
 
-model.type = type;
 end

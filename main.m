@@ -3,34 +3,29 @@ close all; clear; clc; dbstop if error;
 addpath("functions")
 
 %% paramètres
-
-model_vblast   = init_model('vblast');
-model_alamouti = init_model('alamouti');
+model = init_model();
 
 %% simulation -- vblast
 
-fprintf("nSim = %d\n\n", model_vblast.nSim);
+fprintf("nSim = %d\n\n", model.nSim);
 
-[ber_ML, fer_ML] = ML_sim(model_vblast);
-[ber_ZF, fer_ZF] = ZF_sim(model_vblast);
-[ber_MMSE, fer_MMSE] = MMSE_sim(model_vblast);
-[ber_SIC, fer_SIC] = SIC_sim(model_vblast);
+[ber_SIC, fer_SIC]   = sim(model, @vblast_encode, @VBLAST_decode_SIC);
+[ber_ML, fer_ML]     = sim(model, @vblast_encode, @VBLAST_decode_ML);
+[ber_ZF, fer_ZF]     = sim(model, @vblast_encode, @VBLAST_decode_ZF);
+[ber_MMSE, fer_MMSE] = sim(model, @vblast_encode, @VBLAST_decode_MMSE);
 
 %% Comparaison Vblast -- Alamouti
-
 M = [2 4 8];
-ber_ML_vblast = zeros(1, length(model_vblast.SNRdB), length(M));
-ber_ML_alamouti = zeros(1, length(model_alamouti.SNRdB), length(M));
-fer_ML_vblast = zeros(1, length(model_vblast.SNRdB), length(M));
-fer_ML_alamouti = zeros(1, length(model_alamouti.SNRdB), length(M));
+ber_ML_vblast   = zeros(1, length(model.SNRdB), length(M));
+ber_ML_alamouti = zeros(1, length(model.SNRdB), length(M));
+fer_ML_vblast   = zeros(1, length(model.SNRdB), length(M));
+fer_ML_alamouti = zeros(1, length(model.SNRdB), length(M));
 
 for i=1:length(M)
-    model_vblast.M   = M(i);
-    model_alamouti.M = M(i);
-    [ber_ML_vblast(:,:,i)]   = ML_sim(model_vblast);
-    [ber_ML_alamouti(:,:,i)] = ML_sim(model_alamouti);
+    model.M = M(i);
+    [ber_ML_vblast(:,:,i)]   = sim(model, @vblast_encode, @VBLAST_decode_ML);
+    [ber_ML_alamouti(:,:,i)] = sim(model, @alamouti_encode, @Alamouti_decode_ML);
 end
-
 
 %% chargement de donnees
 
@@ -56,39 +51,39 @@ figure
 % ---- Lines
 
 % -- ML
-semilogy(model_vblast.SNRdB, ber_ML, 'Color', '#0072BD');
+semilogy(model.SNRdB, ber_ML, 'Color', '#0072BD');
 grid on;
 hold on;
-semilogy(model_vblast.SNRdB, fer_ML, 'Color', '#0072BD', 'LineStyle','--');
+semilogy(model.SNRdB, fer_ML, 'Color', '#0072BD', 'LineStyle','--');
 
 % -- ZF
-semilogy(model_vblast.SNRdB, ber_ZF, 'Color', '#D95319');
-semilogy(model_vblast.SNRdB, fer_ZF, 'Color', '#D95319', 'LineStyle','--');
+semilogy(model.SNRdB, ber_ZF, 'Color', '#D95319');
+semilogy(model.SNRdB, fer_ZF, 'Color', '#D95319', 'LineStyle','--');
 
 % -- MMSE
-semilogy(model_vblast.SNRdB, ber_MMSE, 'Color', '#EDB120');
-semilogy(model_vblast.SNRdB, fer_MMSE, 'Color', '#EDB120', 'LineStyle','--');
+semilogy(model.SNRdB, ber_MMSE, 'Color', '#EDB120');
+semilogy(model.SNRdB, fer_MMSE, 'Color', '#EDB120', 'LineStyle','--');
 
 % -- SIC
-semilogy(model_vblast.SNRdB, ber_SIC, 'Color', '#7E2F8E');
-semilogy(model_vblast.SNRdB, fer_SIC, 'Color', '#7E2F8E', 'LineStyle','--');
+semilogy(model.SNRdB, ber_SIC, 'Color', '#7E2F8E');
+semilogy(model.SNRdB, fer_SIC, 'Color', '#7E2F8E', 'LineStyle','--');
 
 % ---- Markers
 
-semilogy(model_vblast.SNRdB(1:5:end), ber_ML(1:5:end), 'Color', '#0072BD', 'LineStyle','none', 'Marker', '+');
-semilogy(model_vblast.SNRdB(1:5:end), fer_ML(1:5:end), 'Color', '#0072BD', 'LineStyle','none', 'Marker', '+');
+semilogy(model.SNRdB(1:5:end), ber_ML(1:5:end), 'Color', '#0072BD', 'LineStyle','none', 'Marker', '+');
+semilogy(model.SNRdB(1:5:end), fer_ML(1:5:end), 'Color', '#0072BD', 'LineStyle','none', 'Marker', '+');
 
 % -- ZF
-semilogy(model_vblast.SNRdB(1:5:end), ber_ZF(1:5:end), 'Color', '#D95319', 'LineStyle','none', 'Marker', 'o');
-semilogy(model_vblast.SNRdB(1:5:end), fer_ZF(1:5:end), 'Color', '#D95319', 'LineStyle','none', 'Marker', 'o');
+semilogy(model.SNRdB(1:5:end), ber_ZF(1:5:end), 'Color', '#D95319', 'LineStyle','none', 'Marker', 'o');
+semilogy(model.SNRdB(1:5:end), fer_ZF(1:5:end), 'Color', '#D95319', 'LineStyle','none', 'Marker', 'o');
 
 % -- MMSE
-semilogy(model_vblast.SNRdB(1:5:end), ber_MMSE(1:5:end), 'Color', '#EDB120', 'LineStyle','none', 'Marker', 'v');
-semilogy(model_vblast.SNRdB(1:5:end), fer_MMSE(1:5:end), 'Color', '#EDB120', 'LineStyle','none', 'Marker', 'v');
+semilogy(model.SNRdB(1:5:end), ber_MMSE(1:5:end), 'Color', '#EDB120', 'LineStyle','none', 'Marker', 'v');
+semilogy(model.SNRdB(1:5:end), fer_MMSE(1:5:end), 'Color', '#EDB120', 'LineStyle','none', 'Marker', 'v');
 
 % -- SIC
-semilogy(model_vblast.SNRdB(1:5:end), ber_SIC(1:5:end), 'Color', '#7E2F8E', 'LineStyle','none', 'Marker', '<');
-semilogy(model_vblast.SNRdB(1:5:end), fer_SIC(1:5:end), 'Color', '#7E2F8E', 'LineStyle','none', 'Marker', '<');
+semilogy(model.SNRdB(1:5:end), ber_SIC(1:5:end), 'Color', '#7E2F8E', 'LineStyle','none', 'Marker', '<');
+semilogy(model.SNRdB(1:5:end), fer_SIC(1:5:end), 'Color', '#7E2F8E', 'LineStyle','none', 'Marker', '<');
 
 
 xlabel("SNR")
@@ -107,19 +102,19 @@ title("Salut,")
 %% figures comparaison
 
 figure(2)
-semilogy(model_vblast.SNRdB, ber_ML_vblast(:,:,1), 'Color', '#0072BD', 'Marker', '<');
+semilogy(model.SNRdB, ber_ML_vblast(:,:,1), 'Color', '#0072BD', 'Marker', '<');
 hold on;
 grid on;
 
-semilogy(model_vblast.SNRdB, ber_ML_vblast(:,:,2), 'Color', '#D95319', 'Marker', '>');
+semilogy(model.SNRdB, ber_ML_vblast(:,:,2), 'Color', '#D95319', 'Marker', '>');
 
-semilogy(model_vblast.SNRdB, ber_ML_vblast(:,:,3), 'Color', '#EDB120', 'Marker', 'v');
+semilogy(model.SNRdB, ber_ML_vblast(:,:,3), 'Color', '#EDB120', 'Marker', 'v');
 
-semilogy(model_alamouti.SNRdB, ber_ML_alamouti(:,:,1), 'Color', '#7E2F8E', 'Marker', '+');
+semilogy(model.SNRdB, ber_ML_alamouti(:,:,1), 'Color', '#7E2F8E', 'Marker', '+');
 
-semilogy(model_alamouti.SNRdB, ber_ML_alamouti(:,:,2), 'Color', '#77AC30', 'Marker', 'o');
+semilogy(model.SNRdB, ber_ML_alamouti(:,:,2), 'Color', '#77AC30', 'Marker', 'o');
 
-semilogy(model_alamouti.SNRdB, ber_ML_alamouti(:,:,3), 'Color', '#4DBEEE', 'Marker', '*');
+semilogy(model.SNRdB, ber_ML_alamouti(:,:,3), 'Color', '#4DBEEE', 'Marker', '*');
 
 
 xlabel("SNR");
