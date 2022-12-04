@@ -1,4 +1,4 @@
-function model = init_model(type)
+function model = init_model()
 %INIT_MODEL permet de charger toutes les donnees necessaires aux
 %simulations.
 %
@@ -27,6 +27,6 @@ model.min_bits = 100e6;
 model.min_err  = 100;
 
 % -- nombre de simulations (pour moyennage)
-model.nSim = 1;
+model.nSim = 100;
 
 end
