@@ -1,11 +1,11 @@
-function C_hat = VBLAST_decode_ML(Y, H, C)
-    C_hat = zeros(size(C, 1), size(Y, 2));
-    for i_y = 1:size(Y, 2)
-        cout = zeros(1, size(C, 2));
-        for i_c = 1:size(C, 2)
-            cout(i_c) = norm(Y(:, i_y) - H*C(:, i_c), "fro");
-        end
+function X_hat = VBLAST_decode_ML(Y, H, C)
+    N = size(C, 1);  % nb d'antennes à l'émission
+    L = size(H, 2);  % nb de symboles pour lesquels H est cste
+    X_hat = zeros(N, L);  % estimation des symboles émis
+    for i_y = 1:L
+        symbole_rec = Y(:, i_y);  % les symboles reçus sur les M antennes
+        cout = sqrt(sum((abs(symbole_rec - H*C)).^2));
         [~, ind_min] = min(cout);
-        C_hat(:, i_y) = C(:, ind_min);
+        X_hat(:, i_y) = C(:, ind_min);
     end
 end
