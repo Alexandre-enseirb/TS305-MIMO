@@ -1,4 +1,4 @@
-function [X_vblast, X_bit] = vblast_encode(model, mod)
+function [X_vblast, X_bit] = VBLAST_encode(model, mod)
 %VBLAST_ENCODE Summary of this function goes here
 %   Detailed explanation goes here
 X_bit = randi([0, 1], model.N*model.L, model.Nb);

@@ -9,10 +9,10 @@ model = init_model();
 
 fprintf("nSim = %d\n\n", model.nSim);
 
-[ber_SIC, fer_SIC]   = sim(model, @vblast_encode, @VBLAST_decode_SIC);
-[ber_ML, fer_ML]     = sim(model, @vblast_encode, @VBLAST_decode_ML);
-[ber_ZF, fer_ZF]     = sim(model, @vblast_encode, @VBLAST_decode_ZF);
-[ber_MMSE, fer_MMSE] = sim(model, @vblast_encode, @VBLAST_decode_MMSE);
+[ber_SIC, fer_SIC]   = sim(model, @VBLAST_encode, @VBLAST_decode_SIC);
+[ber_ML, fer_ML]     = sim(model, @VBLAST_encode, @VBLAST_decode_ML);
+[ber_ZF, fer_ZF]     = sim(model, @VBLAST_encode, @VBLAST_decode_ZF);
+[ber_MMSE, fer_MMSE] = sim(model, @VBLAST_encode, @VBLAST_decode_MMSE);
 
 %% Comparaison Vblast -- Alamouti
 M = [2 4 8];
@@ -23,8 +23,8 @@ fer_ML_alamouti = zeros(1, length(model.SNRdB), length(M));
 
 for i=1:length(M)
     model.M = M(i);
-    [ber_ML_vblast(:,:,i)]   = sim(model, @vblast_encode, @VBLAST_decode_ML);
-    [ber_ML_alamouti(:,:,i)] = sim(model, @alamouti_encode, @Alamouti_decode_ML);
+    [ber_ML_vblast(:,:,i)]   = sim(model, @VBLAST_encode, @VBLAST_decode_ML);
+    [ber_ML_alamouti(:,:,i)] = sim(model, @Alamouti_encode, @Alamouti_decode_ML);
 end
 
 %% chargement de donnees
