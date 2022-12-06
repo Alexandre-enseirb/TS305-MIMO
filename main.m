@@ -27,6 +27,8 @@ for i=1:length(M)
     [ber_ML_alamouti(:,:,i)] = sim(model, @Alamouti_encode, @Alamouti_decode_ML);
 end
 
+save("Compare.mat", "ber_ML_vblast", "ber_ML_alamouti", "fer_ML_vblast", "fer_ML_alamouti");
+
 %% chargement de donnees
 
 if ~exist("ber_ML", "var")
