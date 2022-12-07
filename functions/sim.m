@@ -1,27 +1,22 @@
-function [ber, fer] = sim(model, encodeur, decodeur)
+function [ber, fer] = sim_estim_H(model, encodeur, decodeur, canal_estime)
 %SIM simule une communication MIMO et retourne les taux d'erreurs
 %binaire (ber) et paquet (fer) associes.
 %
-%   ML(model) utilise les parametres definis dans 'model' pour derouler
-%   la simulation. Le modele est a initialiser avec la fonction
-%   'init_model()'
+%   sim(model, encoder, decodeur) utilise les parametres definis dans 
+%   'model' pour dérouler la simulation. Le modèle est à initialiser avec
+%   la fonction 'init_model()'
 %
-%   ber = ML_sim(model) permet de recuperer le taux d'erreur binaire a
+%   [ber, fer] = sim(model, encodeur, decodeur, canal_estime) permet de
+%   préciser si le canal doit être estimé (true) ou non (false: par défaut)
+%
+%   ber = sim(model, ...) permet de recuperer le taux d'erreur binaire à
 %   l'issue de la simulation
 %
-%   [ber, fer] = ML_sim(model) permet de recuperer les taux d'erreurs
+%   [ber, fer] = sim(model, ...) permet de recuperer les taux d'erreurs
 %   binaire et paquet a l'issue de la simulation
+%   
 
 print_simulation_details(decodeur)
-% -- erreurs
-
-if model.nSim < 1
-    error("Erreur ! Veuillez spécifier un nombre strictement supérieur à 1 de simulations !");
-end
-
-if floor(model.nSim)~=model.nSim
-    error("Erreur ! Nombre de simulations non entier !")
-end
 
 % -- allocation memoire
 ber = zeros(size(model.SNRdB));
@@ -36,8 +31,19 @@ A_dec = 0:2^model.Nb-1;  % alphabet
 A = qpskmod(A_dec.');
 if strcmp(func2str(decodeur), "VBLAST_decode_ML")
     C1 = mod((0:2^(2*model.Nb)-1), 4);  % colone 1 des codes
-    C2 = fix((0:2^(2*model.Nb)-1)/4);   % colone 2 des codes
+    C2 = fix((0:2^(2*model.Nb)-1)/ 4);  % colone 2 des codes
     A = [qpskmod(C1.').'; qpskmod(C2.').'];
+end
+
+% -- séquence d'apprentissage
+if exist("canal_estime", "var") && canal_estime == true
+    fprintf("Canal estimé par séquence d'apprentissage\n")
+    S = generate_mat_learn_seq(model.N, model.L);
+    S_invGramS = S/(S'*S);
+    get_H = @(~, Y_learn) Y_learn * S_invGramS;
+else
+    S = zeros(model.L, model.N);  % pas de séquence d'apprentissage,
+    get_H = @(H, ~) H;            % le vrai canal est renvoyé
 end
 
 % -- simulation
@@ -56,8 +62,11 @@ for i_sim = 1:model.nSim
             H = randn(model.M, model.N, "like", 1i);
             V = sqrt(model.sigma2(i_sigma2)) * randn(model.M, model.L, "like", 1i);
             Y = H * X + V;
+            V_learn = sqrt(model.sigma2(i_sigma2)) * randn(model.M, model.L, "like", 1i);
+            Y_learn = H * S' + V_learn;
 
             % récepteur
+            H = get_H(H, Y_learn);
             C_ML = decodeur(Y, H, A, model.sigma2(i_sigma2));
             Y_symb = qpskdemod(C_ML(:));
             Y_bit = de2bi(Y_symb(:), model.Nb);
@@ -72,18 +81,16 @@ for i_sim = 1:model.nSim
         end
         ber(i_sigma2) = ber(i_sigma2) + count.err_bit / count.bit;
         fer(i_sigma2) = fer(i_sigma2) + count.err_fra / count.fra;
-        % disp(ber(i_sigma2));
     end
 end
 t = toc;
-% moyennage
 
+% moyennage
 fprintf("Temps d'exécution: %.2f s\nTemps moyen: %.4f s\n\n",t,t/model.nSim);
 ber = ber/model.nSim;
 fer = fer/model.nSim;
 
 end
-
 
 function print_simulation_details(decodeur)
     func_words = strsplit(func2str(decodeur), "_");
