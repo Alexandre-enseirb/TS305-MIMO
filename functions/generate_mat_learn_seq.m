@@ -1,8 +1,8 @@
 function S = generate_mat_learn_seq(N, L)
-% GENERATE_MAT_LEARNING_SEQ renvoie la matrice d'une séquence
-% d'apprentissage bien formée pour une modulation QPSK.
+% GENERATE_MAT_LEARNING_SEQ renvoie la matrice d'une sequence
+% d'apprentissage bien formee pour une modulation QPSK.
 % N: nombre d'antennes à l'émission
-% L: longueur de cohérence du canal
+% L: longueur de coherence du canal
     
     qpskmod = comm.QPSKModulator;
     S = zeros(L, N);

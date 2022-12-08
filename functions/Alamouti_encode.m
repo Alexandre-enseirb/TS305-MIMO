@@ -1,7 +1,4 @@
 function [X, X_bit] = Alamouti_encode(~, mod)
-%ALAMOUTI_ENCODE Summary of this function goes here
-%   Detailed explanation goes here
-
 X_bit = randi([0, 1], 2, 2);  % N=2 et L=2 sont constants pour Alamouti
 X_dec = X_bit * [1; 2];  % conversion bin -> dec (plus rapide que bi2de)
 X_symbole = mod(X_dec);
