@@ -3,7 +3,7 @@ function Y_SIC = VBLAST_decode_SIC(Y, H, A, ~)
 %successives des interferences (SIC) par rapport a la matrice du canal H et
 %a l'alphabet A.
 
-% -- parametres
+% -- Parametres
 [N,L] = size(Y);
 [~,M] = size(H);
 
@@ -11,19 +11,17 @@ if M<N
     error("Le decodeur SIC ne fonctionne que pour M >= N");
 end
 
-% -- decomposition QR de H
+% -- Decomposition QR de H
 [Q,R] = qr(H);
 
-% -- decodage
+% -- Decodage
 Z = Q'*Y;
 Y_SIC = zeros(size(Z));
  
-% init
-
+% Init
 [~, Y_SIC(N,:)] = min(abs(Z(N,:)-R(N,N)*A).^2);
 
-% loop
-
+% Boucle principale
 for l=1:L
     sum_rx = R(N-1,N)*A(Y_SIC(N,l));
     for n=N-1:-1:1
@@ -34,17 +32,7 @@ for l=1:L
     end
 end
 
-%{
-for n=N-1:-1:1
-    for l=1:L
-        Z_diff = min(abs(Z(n,l) - R(n,n+1:end)*Y_SIC(n+1:end,l) - R(n,n)*A).^2);
-        [X_hat(n,l), Y_SIC(n,l)] = min(Z_diff);
-    end
-end
-%}
-
 % récupération des symboles
 Y_SIC = A(Y_SIC);
-
 
 end
