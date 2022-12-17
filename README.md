@@ -24,7 +24,7 @@
        [6.1 Expression du filtre SIC](#expression-du-filtre-sic)\
        [6.2 Loi du signal SIC pré-filtre](#loi-du-signal-sic-pre-filtre)\
        [6.3 Energie du bruit SIC pré-filtré](#energie-du-bruit-sic-pre-filtre)\
-       [6.4 Comparaison des performances du décodeurs SIC avec ZF et MMSE](#comparaison-des-performances-du-decodeurs-sic-avec-zf-et-mmse)
+       [6.4 Comparaison des performances du décodeurs SIC avec ZF et MMSE](#comparaison-des-performances-du-decodeurs-sic-avec-zf-et-mmse)\
 [7. Code Alamouti](#code-alamouti)\
        [7.1 Decodage Alamouti](#decodage-alamouti)\
        [7.2 Loi du signal pré-filtré](#loi-du-signal-pre-filtre)\
