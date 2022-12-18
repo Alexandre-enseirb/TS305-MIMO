@@ -1,6 +1,6 @@
 # Codage spatio-temporel pour les systèmes MIMO
 <p align="center">
-     <img src="https://github.com/Alexandre-enseirb/TS305-MIMO/blob/main/fig/Logo_ENSEIRB-MATMECA-Bordeaux_INP.svg" width=50% height=50% title="Logo ENSEIRB">
+     <img src="https://github.com/Alexandre-enseirb/TS305-MIMO/blob/main/doc/fig/Logo_ENSEIRB-MATMECA-Bordeaux_INP.svg" width=50% height=50% title="Logo ENSEIRB">
 </p>
 
 ## Sommaire
@@ -101,7 +101,7 @@ $$
 
 Ses performances en fonction du rapport signal à bruit sont présentés sur la Figure suivante:
 <p align="center">
-     <img src="https://github.com/Alexandre-enseirb/TS305-MIMO/blob/main/fig/ML.png" width=50% height=50% title="Taux d'erreur du ML">
+     <img src="https://github.com/Alexandre-enseirb/TS305-MIMO/blob/main/doc/fig/ML.png" width=50% height=50% title="Taux d'erreur du ML">
 </p>
 
 ### Inconvénient du décodage ML
@@ -179,7 +179,7 @@ Si ces valeurs $\sigma(\mathbf{H})_i$ sont petites, alors l'énergie du bruit au
 ### Performance du decodeur ZF
 La figure suivante donne les taux d'erreur paquet et taux d'erreur binaire suite à un décodage ZF:
 <p align="center">
-     <img src="https://github.com/Alexandre-enseirb/TS305-MIMO/blob/main/fig/ZF.png" width=50% height=50% title="Taux d'erreur du ZF">
+     <img src="https://github.com/Alexandre-enseirb/TS305-MIMO/blob/main/doc/fig/ZF.png" width=50% height=50% title="Taux d'erreur du ZF">
 </p>
 
 
@@ -311,7 +311,7 @@ La présence du terme $\sigma^2$ au dénominateur des fractions évite que le br
 ### Comparaison des performances des decodeurs ZF MMSE
 La Figure suivante compare les performances du MMSE à celles du ZF précédemment présentées. Sur l'ensemble des SNR testés, le décodage MMSE obtient de meilleurs résultats.
 <p align="center">
-     <img src="https://github.com/Alexandre-enseirb/TS305-MIMO/blob/main/fig/ZF-MMSE.png" width=50% height=50% title="Comparasion du taux d’erreur du ZF avec le MMS">
+     <img src="https://github.com/Alexandre-enseirb/TS305-MIMO/blob/main/doc/fig/ZF-MMSE.png" width=50% height=50% title="Comparasion du taux d’erreur du ZF avec le MMS">
 </p>
 
 A fort SNR $\sigma^2$ est négligeable devant chacune des valeurs singulières $\sigma_i({\mathbf{H}})$. En négligeant $\sigma$, l'expression du MMSE correspond au ZF.
@@ -349,7 +349,7 @@ L'énergie du bruit $\mathbf{v}_l$ est donc $\sigma^2$. Il est indépendant des 
 La figure suivante montre que les performances du SIC relativement aux performances du MMSE et du ZF.
 
 <p align="center">
-     <img src="https://github.com/Alexandre-enseirb/TS305-MIMO/blob/main/fig/ZF-MMSE-SIC.png" width=50% height=50% title="Comparaison du taux d’erreur du SIC avec le MMSE et le ZF">
+     <img src="https://github.com/Alexandre-enseirb/TS305-MIMO/blob/main/doc/fig/ZF-MMSE-SIC.png" width=50% height=50% title="Comparaison du taux d’erreur du SIC avec le MMSE et le ZF">
 </p>
 
 Le décodeur SIC réalise un compromis entre le décodeur MMSE et le décodeur ZF en terme de taux d'erreur binaire pour un SNR faible. Pour un SNR plus important, il est équivalent au décodeur MMSE. Du point de vue du taux d'erreur paquet, il est toujours équivalent ou meilleur que le MMSE.
@@ -456,7 +456,7 @@ Donc $z_1 \sim \mathcal{N}\left(0, \sigma^2(|\mathbf{h_1}|^2 + |\mathbf{h_2}|^2)
 ### Comparaison entre Alamouti VBLAST
 La figure suivante compare le taux d'erreur binaire des codes Alamouti et VBLAST sur un décodage maximisant la vraissemblance pour un nombre croissant d'antennes de réceptions ($M$). Dans les 3 cas de figure, le décodage sur Alamouti est meilleur en terme de taux d'erreur.
 <p align="center">
-     <img src="https://github.com/Alexandre-enseirb/TS305-MIMO/blob/main/fig/VBLAST-Alamouti.png" width=50% height=50% title="Comparaison des performances des codes VBLAST - Alamouti">
+     <img src="https://github.com/Alexandre-enseirb/TS305-MIMO/blob/main/doc/fig/VBLAST-Alamouti.png" width=50% height=50% title="Comparaison des performances des codes VBLAST - Alamouti">
 </p>
 
 La différence de performances entre le code VBLAST et le code d'Alamouti s'explique notamment par la présence de redondance.
@@ -513,7 +513,7 @@ Le cas d'égalité est obtenu lorsque $\mathbf{\Sigma} = P\mathbf{I}$, ce qui im
 La prochaine figure compare les performances d'un codage VBLAST couplé à un décodage par maximum de vraissemblance lorsque le décodeur connaît parfaitement le canal $\mathbf{H}$ ou dispose seulement d'une estimation pour différentes valeurs de $L$.
 
 <p align="center">
-     <img src="https://github.com/Alexandre-enseirb/TS305-MIMO/blob/main/fig/canal_estime.png" width=50% height=50% title="Comparaison du BER entre un canal estimé et un canal parfaitement connu">
+     <img src="https://github.com/Alexandre-enseirb/TS305-MIMO/blob/main/doc/fig/canal_estime.png" width=50% height=50% title="Comparaison du BER entre un canal estimé et un canal parfaitement connu">
 </p>
 
 Sans surprise, les performances réalisées avec un canal estimé sont moins bonnes. Néanmoins, lorsque $N \rightarrow \infty$ les courbes se rapprochent car le récepteur dispose de plus symbole pour estimer la matrice $\mathbf{H}$.
