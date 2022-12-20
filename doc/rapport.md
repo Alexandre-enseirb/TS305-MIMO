@@ -7,8 +7,8 @@
 [1. Introduction](#introduction)\
 [2. Codes VBLAST](#codes-vblast)\
 [3. Décodage ML](#decodage-ml)\
-       [3.1 Expression du maximum de vraissemblance](expression-du-maximum-de-vraissemblance)\
-       [3.2 Inconvénient du décodage ML](Inconvenient-du-decodage-ml)\
+       [3.1 Expression du maximum de vraissemblance](#expression-du-maximum-de-vraissemblance)\
+       [3.2 Inconvénient du décodage ML](#inconvenient-du-decodage-ml)\
 [4. Décodage ZF](#decodage-zf)\
        [4.1 Expression du filtre ZF](#expression-du-filtre-zf)\
        [4.2 Loi du signal ZF pré-filtré](#loi-du-signal-zf-pre-filtre)\
